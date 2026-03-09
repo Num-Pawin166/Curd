@@ -1,0 +1,50 @@
+{
+  "name": "base",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@emotion/react": "^11.11.0",
+    "@emotion/styled": "^11.11.0",
+    "@fontsource/roboto": "^5.0.2",
+    "@mui/icons-material": "^5.11.16",
+    "@mui/material": "^5.13.4",
+    "intl": "^1.2.5",
+    "jwt-decode": "^4.0.0",
+    "notistack": "^3.0.1",
+    "react": "^18.2.0",
+    "react-custom-scrollbars-2": "^4.5.0",
+    "react-dom": "^18.2.0",
+    "react-easy-crop": "^4.7.4",
+    "react-intl": "^6.4.3",
+    "react-ios-pwa-prompt": "^1.8.4",
+    "react-markdown": "^8.0.7",
+    "react-router-dom": "^6.8.0",
+    "react-scripts": "^5.0.1",
+    "recharts": "^3.7.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "proxy": "http://localhost:3300"
+}
