@@ -186,9 +186,9 @@ const DevicePage = () => {
         });
       }
 
-      if (now - lastDbSaveTime.current >= 60000) {
+      if (now - lastDbSaveTime.current >= 5000) {
         const currentDateStr = new Date().toISOString().split('T')[0];
-        const currentTimeStr = new Date().toLocaleTimeString('th-TH', { hour12: false, hour: '2-digit', minute:'2-digit' });
+        const currentTimeStr = new Date().toLocaleTimeString('th-TH', { hour12: false, hour: '2-digit', minute:'2-digit', second:'2-digit' });
         
         let dataToSave = { deviceId: id, date: currentDateStr, time: currentTimeStr, timestamp: now };
         let hasRecordableData = false;
@@ -237,6 +237,19 @@ const DevicePage = () => {
           if (!loadedDevice.tags) loadedDevice.tags = [];
           setDevice(loadedDevice)
           setOriginalDevice(JSON.parse(JSON.stringify(loadedDevice)))
+
+          // โหลด history วันนี้มาเป็นข้อมูลเริ่มต้นของกราฟ
+          const todayStr = new Date().toISOString().split('T')[0]
+          const histResp = await fetch('/api/preferences/readDocument', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'authorization': auth.token },
+            body: JSON.stringify({ collection: historyCollectionName, query: { deviceId: id, date: todayStr } })
+          })
+          const histJson = await histResp.json()
+          if (Array.isArray(histJson) && histJson.length > 0) {
+            histJson.sort((a, b) => a.timestamp - b.timestamp)
+            setRealtimeChartData(histJson)
+          }
         } else {
           alert('Device not found'); navigate('/dashboard')
         }

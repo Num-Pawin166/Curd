@@ -256,7 +256,7 @@ const DeviceDashboard = () => {
   )
   const [dragging, setDragging] = useState(null)
 
-  // fetch device
+  // fetch device + today's history as initial chart data
   useEffect(() => {
     async function fetchDevice() {
       try {
@@ -290,6 +290,19 @@ const DeviceDashboard = () => {
             datetimeX: d.datetimeX || 820, datetimeY: d.datetimeY || 20,
             tagPositions,
           })))
+
+          // โหลด history ของวันนี้มาเป็น initial chart data
+          const todayStr = new Date().toISOString().split('T')[0]
+          const histResp = await fetch('/api/preferences/readDocument', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'authorization': auth.token },
+            body: JSON.stringify({ collection: 'HistoryData', query: { deviceId: id, date: todayStr } }),
+          })
+          const histJson = await histResp.json()
+          if (Array.isArray(histJson) && histJson.length > 0) {
+            histJson.sort((a, b) => a.timestamp - b.timestamp)
+            setChartData(histJson)
+          }
         } else {
           alert('Device not found')
           navigate('/dashboard')
@@ -335,7 +348,7 @@ const DeviceDashboard = () => {
           })
           setChartData(prev => {
             const next = [...prev, point]
-            return next.length > 60 ? next.slice(-60) : next
+            return next.length > 500 ? next.slice(-500) : next
           })
         }
       }
